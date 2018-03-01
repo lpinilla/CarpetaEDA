@@ -35,9 +35,9 @@ public class Ejer15{
 	"pisar" las letras con los demás caracteres
 	*/
 
-	public void numbcombinations(String s){
-		Character[] firstLetters = null, partialResult = null, result = null;
+	public void numbcombinations(String s){		
 		char[] numbers = s.toCharArray();
+		Character[] firstLetters = null, partialResult = new Character[numbers.length], result = null;
 		int totalSize = 1;
 		for(Character c : numbers){
 			if(firstLetters == null){
@@ -47,21 +47,20 @@ public class Ejer15{
 				totalSize *= keyboard.get(c).length;	
 			}			
 		}
-		keyboard.replace('0', new Character[] {keyboard.get(numbers[0])[0]});
-		numbers[0] = '0';
-		partialResult = new Character[numbers.length]; //va a guardar las combinaciones
+		keyboard.replace('0', new Character[] {keyboard.get(numbers[0])[0]}); //hack the 0
+		numbers[0] = '0'; 
 		result = new Character[totalSize];
 		calculateInitialSolution(partialResult, numbers, result, 0, 0);
-		for(Character let : result){
-			System.out.print(let);
-		}
 		System.out.println();
-		for(int i = 1; i < firstLetters.length; i++){			
-			stepFirstLetterOfWord(firstLetters[i], result, numbers.length);
+		for(int i = 0; i < firstLetters.length; i++){										
+			for(Character let : result){
+				System.out.print(let);
+			}
+			System.out.println();
+			if( i != firstLetters.length -1) stepFirstLetterOfWord(firstLetters[i + 1], result, numbers.length);
 		}
 		keyboard.replace('0', null);		
 	}
-
 
 	/* Mismo problema que: dado n arrays de elementos, entregar todas las posibles 
 	** permutaciones de sus elementos.
@@ -72,8 +71,7 @@ public class Ejer15{
 	//Modificado para que guarde los resultados en un array
 
 	private int calculateInitialSolution(Character[] partialResult, char[] numbers, Character[] result, int currentNumber, int indx){
-		if(currentNumber == numbers.length){
-			//save array
+		if(currentNumber == numbers.length){ //save array			
 			for(int i = 0; i < partialResult.length; i++){
 				if(partialResult[i] != null){
 					result[indx++] = partialResult[i];
@@ -95,10 +93,6 @@ public class Ejer15{
 			if(i % combLength == 0){
 				result[i] = c;
 			}
-		}
-		for(Character let : result){
-			System.out.print(let);
-		}
-		System.out.println();
+		}		
 	}
 }
