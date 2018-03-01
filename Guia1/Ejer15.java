@@ -24,7 +24,7 @@ public class Ejer15{
 		keyboard.put('0', null);
 	}
 
-	/* Se puede ver del ejemplo del resultado a "256" : 
+	/* Se puede ver del ejemplo del partialResultado a "256" : 
 	AJM, AJN, AJO, AKM, AKN, AKO, ALM, ALN, ALO,
 	BJM, BJN, BJO, BKM, BKN, BKO, BLM, BLN, BLO,
 	CJM, CJN, CJO, CKM, CKN, CKO, CLM, CLN, CLO
@@ -36,7 +36,7 @@ public class Ejer15{
 	*/
 
 	public void numbcombinations(String s){
-		Character[] firstLetters = null, result = null;
+		Character[] firstLetters = null, partialResult = null, result = null;
 		char[] numbers = s.toCharArray();
 		int totalSize = 1;
 		for(Character c : numbers){
@@ -47,16 +47,19 @@ public class Ejer15{
 				totalSize *= keyboard.get(c).length;	
 			}			
 		}
+		keyboard.replace('0', new Character[] {keyboard.get(numbers[0])[0]});
+		numbers[0] = '0';
+		partialResult = new Character[numbers.length]; //va a guardar las combinaciones
 		result = new Character[totalSize];
-		calculateInitialSolution(result, numbers, 0, 0);
-		for(int i = 1; i < firstLetters.length; i++){
-			//stepFirstLetterOfWord(firstLetters[i], result);
-		}
-		System.out.println("------------------------------");		
-		for(int i = 0; i < totalSize; i++){
-			System.out.print(result[i]);
+		calculateInitialSolution(partialResult, numbers, result, 0, 0);
+		for(Character let : result){
+			System.out.print(let);
 		}
 		System.out.println();
+		for(int i = 1; i < firstLetters.length; i++){			
+			stepFirstLetterOfWord(firstLetters[i], result, numbers.length);
+		}
+		keyboard.replace('0', null);		
 	}
 
 
@@ -64,21 +67,38 @@ public class Ejer15{
 	** permutaciones de sus elementos.
 	** En este caso, n sería numbers.length -1, que son los distintos grupos de letras */
 
-	//https://www.geeksforgeeks.org/find-possible-words-phone-digits/
+	//https://www.geeksforgeeks.org/find-possible-words-phone-digits/ funciona pero no guarda los resultados
 
-	private void calculateInitialSolution(Character[] result, char[] numbers, int currentNumber, int resultNumber){
+	//Modificado para que guarde los resultados en un array
+
+	private int calculateInitialSolution(Character[] partialResult, char[] numbers, Character[] result, int currentNumber, int indx){
 		if(currentNumber == numbers.length){
-			//print
-			/*for(int i = 0; i < result.length; i++){
-				if(result[i] != null) System.out.print(result[i]);
-			}*/
-			return;
+			//save array
+			for(int i = 0; i < partialResult.length; i++){
+				if(partialResult[i] != null){
+					result[indx++] = partialResult[i];
+				}
+			}
+			return indx;
 		}
+		int resIndx = indx;
 		for(int i = 0; i < keyboard.get(numbers[currentNumber]).length; i++){
-			result[currentNumber] = keyboard.get(numbers[currentNumber])[i];
-			calculateInitialSolution(result, numbers, currentNumber + 1, resultNumber +1);
-			if(numbers[currentNumber] == 0 || numbers[currentNumber] == 1) return;			
+			partialResult[currentNumber] = keyboard.get(numbers[currentNumber])[i];
+			resIndx = calculateInitialSolution(partialResult, numbers, result, currentNumber + 1, resIndx);
+			if(numbers[currentNumber] == 1) return resIndx;			
 		}
+		return resIndx;
 	}
 
+	private void stepFirstLetterOfWord(Character c, Character[] result, int combLength){
+		for(int i = 0; i < result.length; i++){
+			if(i % combLength == 0){
+				result[i] = c;
+			}
+		}
+		for(Character let : result){
+			System.out.print(let);
+		}
+		System.out.println();
+	}
 }
