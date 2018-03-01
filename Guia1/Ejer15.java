@@ -48,10 +48,11 @@ public class Ejer15{
 			}			
 		}
 		result = new Character[totalSize];
-		calculateInitialSolution(firstLetters[0], result, numbers, 0);
+		calculateInitialSolution(result, numbers, 0, 0);
 		for(int i = 1; i < firstLetters.length; i++){
 			//stepFirstLetterOfWord(firstLetters[i], result);
 		}
+		System.out.println("------------------------------");		
 		for(int i = 0; i < totalSize; i++){
 			System.out.print(result[i]);
 		}
@@ -65,17 +66,18 @@ public class Ejer15{
 
 	//https://www.geeksforgeeks.org/find-possible-words-phone-digits/
 
-	private void calculateInitialSolution(char initial, Character[] result, char[] numbers, int resultIndex){
-		if(resultIndex == numbers.length){
-			for(int i = 0; i < result.length; i++){
-			System.out.print(result[i]);
-		}
+	private void calculateInitialSolution(Character[] result, char[] numbers, int currentNumber, int resultNumber){
+		if(currentNumber == numbers.length){
+			//print
+			/*for(int i = 0; i < result.length; i++){
+				if(result[i] != null) System.out.print(result[i]);
+			}*/
 			return;
 		}
-		for(int i = 0; i < keyboard.get(numbers[resultIndex]).length; i++){
-			result[resultIndex] = keyboard.get(numbers[resultIndex])[i];
-			calculateInitialSolution(initial, result, numbers, resultIndex + 1);
-			if(numbers[resultIndex] == 0 || numbers[resultIndex] == 9) return;
+		for(int i = 0; i < keyboard.get(numbers[currentNumber]).length; i++){
+			result[currentNumber] = keyboard.get(numbers[currentNumber])[i];
+			calculateInitialSolution(result, numbers, currentNumber + 1, resultNumber +1);
+			if(numbers[currentNumber] == 0 || numbers[currentNumber] == 1) return;			
 		}
 	}
 
