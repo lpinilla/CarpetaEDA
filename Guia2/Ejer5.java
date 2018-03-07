@@ -10,10 +10,10 @@ public class Ejer5{
 
 	private void revertR(Node<T> curr){
 		if(curr == null) return;
-		revertR(curr.next);
 		Node<T> aux = curr.next;
 		curr.next = curr.prev;
 		curr.prev = aux;
+		revertR(curr.prev);
 	}
 
 }
