@@ -4,7 +4,16 @@ public class Ejer5{
 	**isReversed para que este metodo sea O(1)*/
 
 	public void revert(){
-		
+		if(size == 0) return;
+		revertR(root);
+	}
+
+	private void revertR(Node<T> curr){
+		if(curr == null) return;
+		revertR(curr.next);
+		Node<T> aux = curr.next;
+		curr.next = curr.prev;
+		curr.prev = aux;
 	}
 
 }
