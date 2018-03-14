@@ -23,9 +23,13 @@ public class PriorityQueue<T>{
 	}
 
 	public T dequeue(){
-		T ret = this.root.value;
-		this.root = this.root.next;
-		return ret;
+		if(!isEmpty()){
+			T ret = this.root.value;
+			this.root = this.root.next;
+			return ret;
+		}else{
+			throw new NoSuchElementException();
+		}
 	}
 
 	public void enqueue(T elem, int priority){
