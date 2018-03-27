@@ -72,6 +72,39 @@ public class BinaryTree<T> {
 		return max;
 	}
 
+	public static <T, S> BinaryTree<S> treeConverter(Function<T,S> f, BinaryTree<T> tree){
+		BinaryTree<S> ret = null;
+		ret = convertNodes(tree, ret, f);
+		return ret;
+	}
+
+	private static <T,S> BinaryTree<S> convertNodes(BinaryTree<T> tree, BinaryTree<S> ret, Function<T,S> f){
+		if(tree == null) return null;
+		ret = new BinaryTree<S>(f.apply(tree.value));
+		if(tree.left != null){
+			ret.left = convertNodes(tree.left, ret.left, f);
+		}
+		if(tree.right != null){
+			ret.right = convertNodes(tree.right, ret.right, f);
+		}
+		return ret;
+	}
+
+	public static <T> void preOrderPrint(BinaryTree<T> tree){
+		if(tree == null) return;
+		System.out.println(tree.value);
+		if(tree.left != null){
+			preOrderPrint(tree.left);
+		}
+		if(tree.right != null){
+			preOrderPrint(tree.right);
+		}
+	}
+
+	private interface Function<T, S>{
+		public S apply(T elem);
+	}
+
 
 	//para que hacer tests con junit si existe el mágico printf?
 	public static void main(String[] args){
@@ -97,6 +130,15 @@ public class BinaryTree<T> {
 
 		System.out.println(maxElem(bt) == 7);
 
+		BinaryTree<Integer> bt2 = treeConverter(new Function<Integer,Integer>(){
+
+			public Integer apply(Integer elem){
+				return new Integer(elem + 1);
+			}
+		}, bt);
+
+		System.out.println(nNodes(bt2) == 7);
+		preOrderPrint(bt2);
 
 	}
 }
