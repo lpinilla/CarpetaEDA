@@ -3,8 +3,8 @@ import java.util.*;
 public class BinaryTree<T> {
 
 	private T value;
-	private BinaryTree<T> left;
-	private BinaryTree<T> right;
+	 BinaryTree<T> left;
+	 BinaryTree<T> right;
 
 	public BinaryTree(T value) {
 		this(value, null, null);
