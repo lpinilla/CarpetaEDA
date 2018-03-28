@@ -105,6 +105,29 @@ public class BinaryTree<T> {
 		public S apply(T elem);
 	}
 
+	public static <T> boolean isMirrored(BinaryTree<T> bt1, BinaryTree<T> bt2){
+		if(bt1 == null && bt2 == null) return true;
+		if((bt1 == null && bt2 != null) || (bt1 != null && bt2 == null) ) return false;
+		return isMirrored(bt1.left, bt2.right) && isMirrored(bt1.right, bt2.left);
+	}
+
+	public static <T> void BFSPrint(BinaryTree<T> tree){
+		Queue<BinaryTree<T>> q = new LinkedList<BinaryTree<T>>();
+		q.offer(tree);
+		BinaryTree<T> aux;
+		while(!q.isEmpty()){
+			aux = q.poll();
+			System.out.print(aux.value + " ");				
+			if(aux.left != null){
+				q.offer(aux.left);
+			}
+			if(aux.right != null){
+				q.offer(aux.right);
+			}			
+		}
+		System.out.println();
+	}
+
 
 	//para que hacer tests con junit si existe el mágico printf?
 	public static void main(String[] args){
@@ -139,6 +162,20 @@ public class BinaryTree<T> {
 
 		System.out.println(nNodes(bt2) == 7);
 		preOrderPrint(bt2);
+
+		BinaryTree<Integer> tree1 = new BinaryTree<Integer>(1, null, null);
+		tree1.left = new BinaryTree<Integer>(2, null, null);
+		tree1.left.left = new BinaryTree<Integer>(3, null, null);
+
+		BinaryTree<Integer> tree2 = new BinaryTree<Integer>(1, null, null);
+		tree2.right = new BinaryTree<Integer>(2, null, null);
+		tree2.right.right = new BinaryTree<Integer>(3, null, null);
+
+		BinaryTree<Integer> tree3 = new BinaryTree<Integer>(1, null, null);
+		tree3.right = new BinaryTree<Integer>(2, null, null);
+		tree3.right.left = new BinaryTree<Integer>(3, null, null);
+
+		System.out.println(isMirrored(tree1, tree2) && !isMirrored(tree1, tree3));
 
 	}
 }
