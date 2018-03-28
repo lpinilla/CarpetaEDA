@@ -2,9 +2,9 @@ import java.util.*;
 
 public class BinaryTree<T> {
 
-	private T value;
-	 BinaryTree<T> left;
-	 BinaryTree<T> right;
+	T value;
+	BinaryTree<T> left;
+	BinaryTree<T> right;
 
 	public BinaryTree(T value) {
 		this(value, null, null);
