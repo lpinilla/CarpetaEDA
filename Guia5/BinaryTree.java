@@ -128,6 +128,19 @@ public class BinaryTree<T> {
 		System.out.println();
 	}
 
+	public static <T extends Comparable<T>> boolean isBST(BinaryTree<T> tree){
+		if(tree == null) return true;
+		return isBSTR(tree, tree.value);
+	}
+
+	private static<T extends Comparable<T>> boolean isBSTR(BinaryTree<T> tree, T prevVal){
+		if(tree == null) return true;
+		if(isBSTR(tree.left, prevVal) && tree.value.compareTo(prevVal) >= 0){
+			return isBSTR(tree.right, tree.value);
+		}
+		return false;		
+	}
+
 
 	//para que hacer tests con junit si existe el mágico printf?
 	public static void main(String[] args){
