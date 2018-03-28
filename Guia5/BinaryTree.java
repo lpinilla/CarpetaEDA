@@ -129,18 +129,18 @@ public class BinaryTree<T> {
 	}
 
 	public static <T extends Comparable<T>> boolean isBST(BinaryTree<T> tree){
-		if(tree == null) return true;
-		return isBSTR(tree, tree.value);
+		if(tree == null) return false;
+		return isBSTR(tree, null);
 	}
 
-	private static<T extends Comparable<T>> boolean isBSTR(BinaryTree<T> tree, T prevVal){
-		if(tree == null) return true;
-		if(isBSTR(tree.left, prevVal) && tree.value.compareTo(prevVal) >= 0){
-			return isBSTR(tree.right, tree.value);
-		}
-		return false;		
-	}
+	public static <T extends Comparable<T>> boolean isBSTR(BinaryTree<T> tree, BinaryTree<T> prev){
+        if (tree != null) return true;
+        if (!isBSTR(tree.left, prev)) return false;
+        if (prev != null && tree.value.compareTo(prev.value) < 0 ) return false;
+		return isBSTR(tree.right, prev = tree);
+    }
 
+	
 
 	//para que hacer tests con junit si existe el mágico printf?
 	public static void main(String[] args){
@@ -149,7 +149,7 @@ public class BinaryTree<T> {
 		bt.right = new BinaryTree<Integer>(3, null, null);
 		bt.left.left = new BinaryTree<Integer>(4, null, null);
 		bt.left.right = new BinaryTree<Integer>(5, null, null);
-		bt.right.left = new BinaryTree<Integer>(5, null, null);
+		bt.right.left = new BinaryTree<Integer>(6, null, null);
 		bt.right.right = new BinaryTree<Integer>(7, null, null);
 
 		System.out.println(nNodes(bt) == 7);
@@ -189,6 +189,13 @@ public class BinaryTree<T> {
 		tree3.right.left = new BinaryTree<Integer>(3, null, null);
 
 		System.out.println(isMirrored(tree1, tree2) && !isMirrored(tree1, tree3));
+
+		BinaryTree<Integer> bst = new BinaryTree<Integer>(3, null, null);
+		bst.right = new BinaryTree<Integer>(5, null, null);
+		bst.right.left = new BinaryTree<Integer>(4, null, null);
+		bst.left = new BinaryTree<Integer>(2, null, null);
+		bst.left.left = new BinaryTree<Integer>(1, null, null);
+		System.out.println("bst is BST: " + isBST(bst));
 
 	}
 }
