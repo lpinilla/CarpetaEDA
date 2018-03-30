@@ -140,6 +140,17 @@ public class BinaryTree<T> {
 		return isBSTR(tree.right, prev = tree);
     }
 
+    public boolean equals(Object o){
+    	if(o == null || o.getClass() != this.getClass()) return false;
+    	BinaryTree<T> tree = (BinaryTree<T>) o;
+    	return this.value.equals(tree.value);
+    }
+
+    public int hashCode(){
+    	if(this.left == null && this.right == null) return this.value.hashCode();
+    	return this.value.hashCode() + this.left.hashCode() + this.right.hashCode();
+    }
+
 	
 
 	//para que hacer tests con junit si existe el mágico printf?

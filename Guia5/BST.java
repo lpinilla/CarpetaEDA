@@ -2,7 +2,7 @@ import java.util.*;
 
 //Using BinaryTree implementation
 
-public class BST<T> implements BinarySearchTree<T> {
+public class BST<T> implements BinarySearchTree<T>, Iterable<T> {
 
 	private int size;
 	private BinaryTree<T> root;
@@ -16,6 +16,7 @@ public class BST<T> implements BinarySearchTree<T> {
 	public void add(T key){
 		if(key == null) return;
 		addR(root, key);
+		this.size++;
 	}
 
 	private BinaryTree<T> addR(BinaryTree<T> curr, T elem){
@@ -52,6 +53,7 @@ public class BST<T> implements BinarySearchTree<T> {
 	public void remove(T key){
 		if(key == null) return;
 		root = removeR(root, key);
+		this.size--;
 	}
 
 	private BinaryTree<T> removeR(BinaryTree<T> curr, T elem){ //ni idea si funciona
@@ -90,4 +92,74 @@ public class BST<T> implements BinarySearchTree<T> {
 	public int size(){
 		return this.size;
 	}
+
+	public int heightOfValue(T value){
+		if(value == null) throw new IllegalArgumentException();
+		return heightOfValueR(root, value, 0);
+	}
+
+	public int heightOfValueR(BinaryTree<T> curr, T value, int aux){
+		if(curr == null) return (aux + 1) * -1; //aux to return -1
+		int comp = curr.value.compareTo(value);
+		if(comp == 0) return 0;
+		if(comp < 0) return 1 + heightOfValueR(curr.right, value, aux + 1);
+		return 1 + heightOfValueR(curr.left, value, aux + 1);
+	}
+
+	public int nOfLeaves(){
+		if(size == 0) return 0;
+		return nOfLeavesR(root);	
+	}
+
+	private int nOfLeavesR(BinaryTree<T> curr){
+		if(curr.left == null && curr.right == null) return 1;
+		return nOfLeavesR(curr.left) + nOfLeavesR(curr.right);
+	}
+
+	public T biggestElem(){
+		if(size == 0) return null;
+		return biggestElemR(root);
+	}
+
+	private T biggestElemR(BinaryTree<T> curr){
+		if(curr.left == null && curr.right == null) return curr.value;
+		if(curr.right != null) return biggestElemR(curr.right);
+		return curr.value;	
+	}
+
+	public void printNodeParents(BinaryTree<T> tree){
+		if(tree == null) throw new IllegalArgumentException();
+		printNodeParentsR(root, tree);
+	}
+
+	private void printNodeParentsR(BinaryTree<T> curr, BinaryTree<T> other){
+		if(curr == null || curr.equals(other)) return;
+		int comp = curr.value.compareTo(other.value);
+		System.out.println(curr.value);
+		if(comp > 0) return printNodeParentsR(curr.left, other);
+		return printNodeParentsR(curr.right, other);
+	}
+
+	public void printNodeChildren(BinaryTree<T> tree){
+		if(tree == null) throw new IllegalArgumentException();
+		printNodeChildrenR(root, tree, false);
+	}
+
+	private void printNodeChildrenR(BinaryTree<T> curr, BinaryTree<T> other, boolean haveToPrint){
+		if(curr == null) return;
+		int comp = curr.value.compareTo(other.value);
+		if(comp == 0 || haveToPrint){
+			System.out.println(curr.value);
+			printNodeChildrenR(curr.left, other, true);
+			printNodeChildrenR(curr.right, other, true);
+		}
+		if(comp > 0) return printNodeParentsR(curr.left, other, false);
+		return printNodeParentsR(curr.right, other, false);
+	}
+
+	public Iterator<T> preOrderIterator();
+
+	public Iterator<T> InOrderIterator();	
+
+	public Iterator<T> PostOrderIterator();	
 }
