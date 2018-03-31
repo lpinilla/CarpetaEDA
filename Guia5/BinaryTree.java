@@ -143,7 +143,19 @@ public class BinaryTree<T> {
     public boolean equals(Object o){
     	if(o == null || o.getClass() != this.getClass()) return false;
     	BinaryTree<T> tree = (BinaryTree<T>) o;
-    	return this.value.equals(tree.value);
+    	return isEqual(this, tree);
+    }
+
+    private boolean isEqual(BinaryTree<T> t1, BinaryTree<T> t2){
+    	if( (t1 == null && t2 != null) || (t1 != null && t2 == null)) return false;
+    	if(t1.value.equals(t2.value)){
+    		if(t1.left == null && t2.left != null) return false;
+    		if(t1.right == null && t2.right != null) return false;
+    		if(t2.left == null && t1.left != null) return false;
+    		if(t2.right == null && t1.right != null) return false;
+    		return isEqual(t1.left, t2.left) && isEqual(t1.right, t2.right);
+    	}
+    	return false;
     }
 
     public int hashCode(){
