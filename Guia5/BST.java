@@ -2,7 +2,7 @@ import java.util.*;
 
 //Using BinaryTree implementation
 
-public class BST<T> implements BinarySearchTree<T>, Iterable<T> {
+public class BST<T> implements BinarySearchTree<T>, Iterable<BinaryTree<T>> {
 
 	private int size;
 	private BinaryTree<T> root;
@@ -157,9 +157,105 @@ public class BST<T> implements BinarySearchTree<T>, Iterable<T> {
 		return printNodeParentsR(curr.right, other, false);
 	}
 
-	public Iterator<T> preOrderIterator();
+	public List<T> searchByRange(T min, T max){
+		if(min == null || max == null) throw new IllegalArgumentException();
+		List<T> ret = new LinkedList<T>();
+		inOrderSearchByRange(root, min, max, ret);
+		return ret;
+	}
 
-	public Iterator<T> InOrderIterator();	
+	private void inOrderSearchByRange(BinaryTree<T> curr, T min, T max, List<T> ret){
+		if(curr == null) return;
+		inOrderSearchByRange(curr.left, min, max, ret);
+		if( curr.value.compareTo(min) >= 0 && curr.value.compareTo(max) <= 0){
+			ret.add(curr.value);
+		}
+		inOrderSearchByRange(curr.right, min, max, ret);
+	}
 
-	public Iterator<T> PostOrderIterator();	
+	private class TreePreOrderIterator<T> implements Iterator<BinaryTree<T>> {
+
+		Stack<BinaryTree<T>> s
+		BinaryTree<T> aux;
+
+		public TreePreOrderIterator(BinaryTree<T> root){
+			this.aux = null;
+			this.s = new Stack<BinaryTree<T>>();
+			s.push(root);
+		}
+
+
+		public boolean hasNext(){
+			return !s.isEmpty();
+		}
+
+		public BinaryTree<T> next(){
+			if(!hasNext()) throw new NoSuchElementException();
+			aux = s.pop();
+			if(aux.right != null) s.push(aux.right);
+			if(aux.left != null) s.push(aux.left);
+			return aux; 
+		}
+	}
+
+
+	public Iterator<BinaryTree<T>> inOrderIterator(){
+		TreePreOrderIterator<BinaryTree<T>> it = new TreePreOrderIterator<BinaryTree<T>>(root);
+		return it;
+	}
+
+	private class TreeInOrderIterator<T> implements Iterator<BinaryTree<T>> {
+
+		private class NodeMarker<T> {
+			BinaryTree<T> tree;
+			boolean visited;
+
+			public NodeMarker(BinaryTree<T> t, boolean visited){
+				this.tree = t;
+				this.visited = visited;
+			}
+		}
+
+		Stack<NodeMarker<T>> s;
+		NodeMarker<T> aux;
+
+
+		public TreeInOrderIterator(BinaryTree<T> root){
+			this.aux = null;
+			this.s = new Stack<NodeMarker<T>>();
+			s.push(new NodeMarker(root, false));
+		}
+
+
+		public boolean hasNext(){
+			return !s.isEmpty();
+		}
+
+		public BinaryTree<T> next(){
+			if(!hasNext()) throw new NoSuchElementException();
+			aux = s.peek();
+			if(!aux.visited){
+				aux.visited = true;
+				if(aux.tree.right != null){
+					s.push(new NodeMarker(aux.tree.right, false));
+				}
+				if(aux.tree.left != null){
+					s.push(new NodeMarker(aux.tree.left, false));
+				}
+				if(aux.tree.left == null && aux.tree.right == null){
+					return s.pop();
+				}
+			}else{
+				return s.pop();
+			}
+		}
+	}
+
+
+	public Iterator<BinaryTree<T>> InOrderIterator(){
+		TreeInOrderIterator<BinaryTree<T>> it = TreeInOrderIterator<BinaryTree<T>>(root);
+		return it;
+	}	
+
+	public Iterator<BinaryTree<T>> PostOrderIterator();	
 }

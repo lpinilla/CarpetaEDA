@@ -1,4 +1,4 @@
-public interface BinarySearchTree<T> implements Iterable<T>{
+public interface BinarySearchTree<T> implements Iterable<BinaryTree<T>>{
 	/**
 	* Agrega una clave al árbol.
 	* Si ya existe, no hace nada y el árbol no se modifica.
@@ -30,10 +30,10 @@ public interface BinarySearchTree<T> implements Iterable<T>{
 
 	public void printNodeChildren(BinaryTree<T> tree);
 
-	public Iterator<T> preOrderIterator();
+	public Iterator<BinaryTree<T>> preOrderIterator();
 
-	public Iterator<T> InOrderIterator();	
+	public Iterator<BinaryTree<T>> InOrderIterator();	
 
-	public Iterator<T> PostOrderIterator();	
+	public Iterator<BinaryTree<T>> PostOrderIterator();	
 
 }
