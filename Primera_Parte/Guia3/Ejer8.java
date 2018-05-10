@@ -41,6 +41,7 @@ public class Ejer8{
 				}
 			}
 		}
+		if(!stack.isEmpty()) return false;
 		return true;
 	}
 }
